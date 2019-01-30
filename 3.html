@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>I have no clue what I'm doing</title>
+  <style type="text/css">
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  #app {
+    /* codaisseur red: #D32F2F */
+    background: #eee;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    /*perspective: 1000px;*/
+  }
+  svg {
+    display: block;
+  }
+  .dev {
+    font-family: monospace;
+  }
+  .timeline {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: #CDDC39;
+    transition: background .1s ease;
+    cursor: pointer;
+  }
+  .timeline .time {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 0%;
+    background: #009688;
+    transition: background .1s ease;
+  }
+  .timeline:hover {
+    background: #c0ce35;
+  }
+  .timeline:hover .time,
+  .timeline .time:hover {
+    background: #008074;
+  }
+  </style>
+</head>
+<body>
+
+<div id="app" @wheel.prevent="onScroll($event)">
+  <div class="dev">
+    use your trackpad<br />
+    t {{ t | round(2) }}<br />
+    &nbsp;
+  </div>
+  <div class="card">
+    <svg width="500" height="500" viewBox="-100 -100 700 700" xmlns="http://www.w3.org/2000/svg">
+      <g fill="black">
+        <g :transform="`translate(${posX} 0)`">
+          <rect :x="cursorX" y="-30" width="200" height="560" :fill="cursorFill" stroke="none" />
+          <path transform="translate(200 0)" v-if="charactersTyped > 2" class="mouth" d="M399.113 97.2766C399.113 94.6328 400.015 92.3516 401.816 90.433C403.622 88.5177 405.747 87.5575 408.198 87.5575C413.992 87.5575 421.048 90.8308 429.357 97.3757C437.673 103.919 446.594 113.279 456.13 125.442C470.689 144.089 481.639 163.722 488.985 184.354C496.327 204.979 500 226.47 500 248.814C500 273.303 495.554 296.842 486.666 319.449C477.774 342.058 464.566 363.353 447.045 383.316C439.57 391.775 432.419 398.301 425.592 402.86C418.76 407.426 412.835 409.699 407.811 409.699C405.489 409.699 403.461 408.811 401.721 407.028C399.982 405.241 399.113 403.027 399.113 400.373C399.113 397.472 402.258 390.732 408.551 380.149C413.168 372.342 416.761 365.997 419.329 361.105C429.72 341.268 437.233 322.424 441.85 304.575C446.469 286.722 448.781 268.148 448.781 248.814C448.781 231.494 446.924 214.7 443.202 198.436C439.475 182.172 433.767 165.973 426.065 149.839C421.828 141.112 416.281 130.897 409.413 119.196C402.545 107.491 399.113 100.186 399.113 97.2766" />
+          <g transform="translate(200 0)">
+            <path class="right eye" d="M104.628 98.6258C93.6355 88.1983 78.9925 82.9805 60.7054 82.9805C42.6084 82.9805 27.9694 88.1983 16.7844 98.6258C5.58956 109.057 0 122.676 0 139.485C0 156.496 5.64246 170.423 16.9274 181.253C28.2084 192.087 42.8024 197.503 60.7054 197.503C78.8025 197.503 93.3925 192.139 104.484 181.403C115.573 170.671 121.119 156.698 121.119 139.485C121.119 122.676 115.618 109.057 104.628 98.6258Z" />
+            <path class="left eye" d="M104.92 318.33C93.7315 307.907 78.9925 302.683 60.7054 302.683C42.8024 302.683 28.2084 307.957 16.9274 318.477C5.64246 329.014 0 342.578 0 359.179C0 375.998 5.64246 389.821 16.9274 400.655C28.2084 411.481 42.8024 416.897 60.7054 416.897C78.9925 416.897 93.7315 411.533 104.92 400.805C116.105 390.075 121.701 376.202 121.701 359.179C121.701 342.378 116.105 328.764 104.92 318.33Z" />
+          </g>
+          <path transform="translate(200 0)" v-if="charactersTyped > 1" class="moustache" d="M271.313 249.693C285.56 259.221 295.402 270.326 300.842 282.973C306.277 295.612 308.999 317.381 308.999 348.307V390.792C308.999 410.311 310.554 422.565 313.677 427.598C316.795 432.619 322.703 436.015 331.409 437.793C333.491 438.358 336.615 438.932 340.774 439.501C362.143 442.717 372.834 453.226 372.834 471.022C372.834 479.741 369.728 486.739 363.512 492.048C357.301 497.346 349.01 500 338.658 500C325.473 500 312.714 497.791 300.38 493.384C288.043 488.967 277.827 482.931 269.732 475.259C260.875 467.006 254.619 456.356 250.95 443.324C247.275 430.275 245.438 407.93 245.438 376.289V342.016C245.438 307.304 229.804 287.336 198.55 282.132C197.229 281.75 196.289 281.554 195.724 281.554C186.685 280.001 179.995 276.691 175.665 271.625C171.334 266.56 169.172 259.236 169.172 249.693C169.172 241.317 171.006 234.697 174.679 229.834C178.348 224.969 184.236 221.463 192.335 219.318C195.909 218.164 201.09 216.916 207.868 215.573C232.913 210.767 245.438 191.743 245.438 158.493L245.438 124.19C245.438 94.7294 246.852 74.0867 249.672 62.2391C252.501 50.401 257.305 40.053 264.084 31.1892C271.991 21.3715 282.585 13.7211 295.86 8.23228C309.136 2.74537 323.78 0 339.783 0C349.766 0 357.768 2.6557 363.797 7.95755C369.819 13.2632 372.834 20.2535 372.834 28.9341C372.834 47.068 361.391 57.9675 338.507 61.6286C336.421 61.8251 334.909 62.0178 333.963 62.2086C324.506 63.7463 317.978 67.2529 314.385 72.7322C310.792 78.2115 308.999 90.6543 308.999 110.063V152.437C308.999 181.385 306.179 202.61 300.557 216.119C294.936 229.626 285.184 240.818 271.313 249.693" />
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="timeline" @click.prevent="toggleTime">
+    <div class="time" :style="{ width: (100 * t/len) + '%' }"></div>
+  </div>
+</div>
+
+<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+
+/*
+
+the logo fits snugly in [0,0] -- [500,500]
+
+*/
+
+Vue.filter('round', (num, decimals = 0) => +parseFloat(num).toFixed(decimals));
+
+const app = new Vue({
+  el: '#app',
+  data: {
+    t: 100, // current position in animation (ms)
+    len: 4000, // total animation duration (ms)
+  },
+  computed: {
+    cursorFill () {
+      return (
+          (0 < this.t && this.t < 400) ||
+          (700 < this.t && this.t < 1100) ||
+          (1600 < this.t && this.t < 2000) ||
+          (2100 < this.t && this.t < 2500)
+        ) ? "white" : "none";
+    },
+    charactersTyped () {
+      const t = this.t;
+      if (t < 700) {
+        return 1;
+      } else if (t < 2100) {
+        return 2;
+      } else {
+        return 3;
+      }
+    },
+    cursorX () {
+      return -50 + this.charactersTyped * 200;
+    },
+    posX () {
+      return 100 - this.charactersTyped * 100;
+    },
+//    total () {
+//      return this.accum.length ? this.accum[this.accum.length - 1] : 10000;
+//    },
+  },
+  methods: {
+    normalize (t) {
+      return (this.len + t) % this.len;
+    },
+    onScroll (e) {
+      this.t = this.normalize(this.t + e.deltaY);
+    },
+    toggleTime () {
+      if (performance.now() - (this._start || -Infinity) < 250) {
+        // dbl click
+        cancelAnimationFrame(this._req);
+        delete this._req;
+        delete this._start;
+        this.t = 0;
+        return;
+      }
+
+      this._start = performance.now();
+
+      if (this._req) {
+        cancelAnimationFrame(this._req);
+        delete this._req;
+      } else {
+        this._t0 = this.t;
+        this.step();
+      }
+    },
+    step () {
+      this._req = requestAnimationFrame(() => {
+        this.t = this.normalize(this._t0 + (performance.now() - this._start));
+        this.step();
+      });
+    },
+  },
+  mounted () {
+//
+//    this.timeline = anime.timeline({ loop: true })
+//      .add({
+//        targets: this.$data,
+//        t: 1,
+//        duration: 4000
+//      })
+//      .add({
+//        targets: this.$data,
+//        easing: "linear",
+//        duration: 1000
+//      }, '-=4000')
+//      .add({
+//        targets: this.$data,
+//        cursorX: 100,
+//        easing: "easeOutExpo",
+//        duration: 500
+//      })
+//      .add({
+//        targets: this.$data,
+//        easing: "linear",
+//        duration: 2000
+//      })
+      /*
+      .add({
+        targets: this.$data,
+        translateX: [0,$(".ml11 .letters").width()],
+        easing: "easeOutExpo",
+        duration: 700,
+        delay: 100
+      }).add({
+        targets: this.$data,
+        opacity: [0,1],
+        easing: "easeOutExpo",
+        duration: 600,
+        offset: '-=775',
+        delay: function(el, i) {
+          return 34 * (i+1)
+        }
+      }).add({
+        targets: this.$data,
+        opacity: 0,
+        duration: 1000,
+        easing: "easeOutExpo",
+        delay: 1000
+      });*/
+  },
+});
+
+</script>
+</body>
+</html>
